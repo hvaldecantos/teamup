@@ -1,6 +1,7 @@
 # Issue 2: Partition result model & MaxDifferenceScorer
 
 **Type**: AFK
+**Status**: to-do
 
 ## What to build
 

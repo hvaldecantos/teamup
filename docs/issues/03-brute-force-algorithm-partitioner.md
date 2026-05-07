@@ -1,6 +1,7 @@
 # Issue 3: BruteForce algorithm & Partitioner orchestrator
 
 **Type**: AFK
+**Status**: to-do
 
 ## What to build
 

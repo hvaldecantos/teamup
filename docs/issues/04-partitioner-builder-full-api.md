@@ -1,6 +1,7 @@
 # Issue 4: PartitionerBuilder & full API contract
 
 **Type**: AFK
+**Status**: to-do
 
 ## What to build
 

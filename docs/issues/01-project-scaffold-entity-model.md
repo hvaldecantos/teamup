@@ -1,6 +1,7 @@
 # Issue 1: Project scaffold & Entity data model
 
 **Type**: AFK
+**Status**: done
 
 ## What to build
 
@@ -14,10 +15,10 @@ Set up the `src/teamup_copilot/` package structure and implement the `Entity` da
 
 ## Acceptance criteria
 
-- [ ] `src/teamup_copilot/` package is created with an `__init__.py` that exposes the public API surface
-- [ ] `Entity` class accepts an identifier (string) and an attributes dictionary (str → numeric)
-- [ ] Accessing a missing attribute raises a clear, descriptive error
-- [ ] Basic unit tests cover construction, attribute access, and the missing-attribute error case
+- [x] `src/teamup_copilot/` package is created with an `__init__.py` that exposes the public API surface
+- [x] `Entity` class accepts an identifier (string) and an attributes dictionary (str → numeric)
+- [x] Accessing a missing attribute raises a clear, descriptive error
+- [x] Basic unit tests cover construction, attribute access, and the missing-attribute error case
 
 ## Blocked by
 
