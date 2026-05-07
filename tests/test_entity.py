@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.teamup_copilot.entity import Entity
+from src.teamup.entity import Entity
 
 
 def test_entity_creation_basic() -> None:
