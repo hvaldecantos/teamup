@@ -2,14 +2,14 @@
 
 import pytest
 
-from src.teamup.entity import Entity
+from src.teamup.entity import AttributeValue, Entity
 
 
 def test_entity_creation_basic() -> None:
     """Test basic Entity creation."""
     entity = Entity(id="entity_1", attributes={"score": 10.5})
     assert entity.id == "entity_1"
-    assert entity.attributes == {"score": 10.5}
+    assert entity.attributes == {"score": AttributeValue(value=10.5)}
 
 
 def test_entity_creation_with_empty_attributes() -> None:
@@ -25,7 +25,11 @@ def test_entity_creation_with_numeric_attributes() -> None:
         id="entity_3",
         attributes={"count": 5, "ratio": 3.14, "value": 100},
     )
-    assert entity.attributes == {"count": 5, "ratio": 3.14, "value": 100}
+    assert entity.attributes == {
+        "count": AttributeValue(value=5),
+        "ratio": AttributeValue(value=3.14),
+        "value": AttributeValue(value=100),
+    }
 
 
 def test_entity_get_attribute_success() -> None:
