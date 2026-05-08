@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-from src.teamup.entity import Entity
+from teamup.entity import Entity
 
 
 class Scorer(ABC):

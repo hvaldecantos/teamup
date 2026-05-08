@@ -1,7 +1,7 @@
 """Tests for the Partition result object."""
 
-from src.teamup.entity import Entity
-from src.teamup.partition import Partition
+from teamup.entity import Entity
+from teamup.partition import Partition
 
 
 def test_partition_creation_basic() -> None:

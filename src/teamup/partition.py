@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 
-from src.teamup.entity import Entity
+from teamup.entity import Entity
 
 
 class Partition(BaseModel):

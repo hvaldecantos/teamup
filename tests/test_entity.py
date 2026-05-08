@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.teamup.entity import AttributeValue, Entity
+from teamup.entity import AttributeValue, Entity
 
 
 def test_entity_creation_basic() -> None:

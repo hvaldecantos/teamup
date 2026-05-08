@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.teamup.entity import Entity
-from src.teamup.scorer import MaxDifferenceScorer, Scorer
+from teamup.entity import Entity
+from teamup.scorer import MaxDifferenceScorer, Scorer
 
 
 def test_scorer_is_abstract() -> None:
