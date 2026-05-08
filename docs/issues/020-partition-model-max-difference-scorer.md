@@ -1,4 +1,4 @@
-# Issue 2: Partition result model & MaxDifferenceScorer
+# Issue 020: Partition result model & MaxDifferenceScorer
 
 **Type**: AFK
 **Status**: to-do
@@ -17,4 +17,4 @@ Introduce the `Partition` result object and the scoring layer. Define an abstrac
 
 ## Blocked by
 
-- Issue #1 (project scaffold & `Entity` model)
+- Issue #010 (project scaffold & `Entity` model)

@@ -1,4 +1,4 @@
-# Issue 3: BruteForce algorithm & Partitioner orchestrator
+# Issue 030: BruteForce algorithm & Partitioner orchestrator
 
 **Type**: AFK
 **Status**: to-do
@@ -18,4 +18,4 @@ Introduce the algorithm layer and the `Partitioner` orchestrator. Define an abst
 
 ## Blocked by
 
-- Issue #2 (Partition result model & MaxDifferenceScorer)
+- Issue #020 (Partition result model & MaxDifferenceScorer)

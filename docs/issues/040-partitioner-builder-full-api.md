@@ -1,4 +1,4 @@
-# Issue 4: PartitionerBuilder & full API contract
+# Issue 040: PartitionerBuilder & full API contract
 
 **Type**: AFK
 **Status**: to-do
@@ -33,4 +33,4 @@ result = partitioner.partition(
 
 ## Blocked by
 
-- Issue #3 (BruteForce algorithm & Partitioner orchestrator)
+- Issue #030 (BruteForce algorithm & Partitioner orchestrator)
