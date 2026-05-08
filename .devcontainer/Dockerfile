@@ -9,10 +9,4 @@ RUN apt-get update && apt-get install -y docker.io \
     && usermod -aG docker vscode
 
 # Install uv package manager
-RUN pip install uv
-
-# Copy project files
-COPY pyproject.toml pyproject.lock* ./
-
-# Install dependencies using uv
-RUN uv sync
+RUN pip install uv autopep8
