@@ -9,11 +9,11 @@ Introduce the `Partition` result object and the scoring layer. Define an abstrac
 
 ## Acceptance criteria
 
-- [ ] Abstract `Scorer` interface is defined with a `score(groups, attributes)` method signature
-- [ ] `MaxDifferenceScorer` implements `Scorer` and returns the correct score for known attribute distributions
-- [ ] `Partition` result object stores groups (list of list of `Entity`) and a numeric score
-- [ ] Tests cover `MaxDifferenceScorer` on multiple attribute distributions, including ties, single-attribute, and multi-attribute cases
-- [ ] Tests cover basic `Partition` construction
+- [x] Abstract `Scorer` interface is defined with a `score(groups, attributes)` method signature
+- [x] `MaxDifferenceScorer` implements `Scorer` and returns the correct score for known attribute distributions
+- [x] `Partition` result object stores groups (list of list of `Entity`) and a numeric score
+- [x] Tests cover `MaxDifferenceScorer` on multiple attribute distributions, including ties, single-attribute, and multi-attribute cases
+- [x] Tests cover basic `Partition` construction
 
 ## Blocked by
 
