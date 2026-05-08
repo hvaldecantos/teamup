@@ -1,4 +1,4 @@
-# Issue 1: Project scaffold & Entity data model
+# Issue 010: Project scaffold & Entity data model
 
 **Type**: AFK
 **Status**: done
