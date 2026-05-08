@@ -25,3 +25,11 @@ PartitionerBuilder  →  fluent builder with sensible defaults
 ## Requirements
 
 Python 3.10+. See `pyproject.toml` for dependencies.
+
+## Development
+
+```bash
+$ uv sync --extra dev    # Install dependencies including dev tools
+$ uv run mypy src/       # Type check the source code
+$ uv run pytest          # Run test suite
+```
