@@ -18,6 +18,16 @@ def test_max_difference_scorer_instantiation() -> None:
     scorer = MaxDifferenceScorer()
     assert isinstance(scorer, Scorer)
 
+def test_max_difference_scorer_single_group() -> None:
+    """Test MaxDifferenceScorer with a single group."""
+    # Single group with a single entity
+    group1 = [Entity(id="e1", attributes={"value": 10})]
+    groups = [group1]
+
+    scorer = MaxDifferenceScorer()
+    score = scorer.score(groups, ["value"])
+
+    assert score == 0.0
 
 def test_max_difference_scorer_single_attribute_balanced() -> None:
     """Test MaxDifferenceScorer with a single attribute, balanced groups."""
