@@ -1,7 +1,7 @@
 # Issue 030: BruteForce algorithm & Partitioner orchestrator
 
 **Type**: AFK
-**Status**: to-do
+**Status**: done
 
 ## What to build
 
@@ -9,12 +9,12 @@ Introduce the algorithm layer and the `Partitioner` orchestrator. Define an abst
 
 ## Acceptance criteria
 
-- [ ] Abstract `PartitioningAlgorithm` interface is defined
-- [ ] `BruteForceAlgorithm` finds the provably optimal partition for small datasets (≤20 entities)
-- [ ] `Partitioner` orchestrates the algorithm and scorer and returns a `Partition` result
-- [ ] Swapping the algorithm or scorer in `Partitioner` requires no changes to `Partitioner` itself
-- [ ] Tests verify that `BruteForceAlgorithm` finds the known-optimal partition for regression datasets
-- [ ] Integration tests run `Partitioner` end-to-end with `BruteForceAlgorithm` + `MaxDifferenceScorer`
+- [x] Abstract `PartitioningAlgorithm` interface is defined
+- [x] `BruteForceAlgorithm` finds the provably optimal partition for small datasets (≤20 entities)
+- [x] `Partitioner` orchestrates the algorithm and scorer and returns a `Partition` result
+- [x] Swapping the algorithm or scorer in `Partitioner` requires no changes to `Partitioner` itself
+- [x] Tests verify that `BruteForceAlgorithm` finds the known-optimal partition for regression datasets
+- [x] Integration tests run `Partitioner` end-to-end with `BruteForceAlgorithm` + `MaxDifferenceScorer`
 
 ## Blocked by
 
