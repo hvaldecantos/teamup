@@ -59,16 +59,21 @@ def test_partitioner_with_brute_force_and_max_difference() -> None:
     entities = [
         Entity(id="e1", attributes={"skill": 10}),
         Entity(id="e2", attributes={"skill": 10}),
-        Entity(id="e3", attributes={"skill": 5}),
+        Entity(id="e3", attributes={"skill": 4}),
         Entity(id="e4", attributes={"skill": 5}),
     ]
 
     partition = partitioner.partition(entities, 2, ["skill"])
 
     assert len(partition.groups) == 2
-    # With [10,5] and [10,5], each sums to 15, difference is 0
-    assert partition.score == 0.0
+    assert partition.score == 1.0
 
+    print(partition.groups[0])
+    print(partition.groups[1])
+
+    # Assert partition's group composition
+    assert partition.groups[0] == [entities[0], entities[2]]
+    assert partition.groups[1] == [entities[1], entities[3]]
 
 def test_partitioner_empty_entities_raises() -> None:
     """Test that empty entities list raises error."""
@@ -161,4 +166,29 @@ def test_partitioner_multi_attribute_integration() -> None:
 
     assert len(partition.groups) == 2
     assert all(len(group) > 0 for group in partition.groups)
+    assert partition.score >= 0
+
+
+def test_partitioner_five_entities_into_three_groups() -> None:
+    """Test Partitioner with 5 entities and multiple attributes into 3 groups."""
+    algorithm = BruteForceAlgorithm()
+    scorer = MaxDifferenceScorer()
+    partitioner = Partitioner(algorithm, scorer)
+
+    entities = [
+        Entity(id="e1", attributes={"skill": 10, "experience": 5}),
+        Entity(id="e2", attributes={"skill": 8, "experience": 7}),
+        Entity(id="e3", attributes={"skill": 12, "experience": 3}),
+        Entity(id="e4", attributes={"skill": 6, "experience": 9}),
+        Entity(id="e5", attributes={"skill": 9, "experience": 6}),
+    ]
+
+    partition = partitioner.partition(
+        entities, 3, ["skill", "experience"]
+    )
+
+    assert partition.groups[0] == [entities[0]]
+    assert partition.groups[1] == [entities[1], entities[4]]
+    assert partition.groups[2] == [entities[2], entities[3]]
+
     assert partition.score >= 0
