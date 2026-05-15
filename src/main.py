@@ -48,7 +48,7 @@ def main() -> None:
         MaxDifferenceScorer())
 
     partition = partitioner.partition(
-        entities, 2, ["count"]
+        entities=entities, num_groups=2, attributes=["count"]
     )
 
     for g in partition.groups:
