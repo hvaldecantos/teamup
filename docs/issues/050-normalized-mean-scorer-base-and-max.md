@@ -1,7 +1,7 @@
 # Issue 050: Abstract `NormalizedMeanScorer` base class and `MeanMaxDifferenceScorer`
 
 **Type**: AFK
-**Status**: open
+**Status**: done
 
 ## What to build
 
@@ -19,13 +19,13 @@ No changes to `Partitioner`, `PartitionerBuilder`, `Entity`, `Partition`, or `Ma
 
 ## Acceptance criteria
 
-- [ ] `NormalizedMeanScorer` is abstract and cannot be instantiated directly
-- [ ] `_normalize()` computes global min/max across all groups; zero-variance attributes yield `0.0`
-- [ ] `_combine()` is abstract; `NormalizedMeanScorer` does not implement it
-- [ ] `score()` raises `ValueError` for empty groups, empty attributes, or any empty group
-- [ ] `MeanMaxDifferenceScorer` overrides `_combine()` to return `max(differences)`
-- [ ] `MeanMaxDifferenceScorer` is a `Scorer` instance
-- [ ] Tests in `tests/test_scorer.py` cover: balanced groups, full-range unbalanced (score 1.0), multiple entities per group, multiple attributes, zero-variance attribute, three or more groups, floating-point values, and all error cases
+- [x] `NormalizedMeanScorer` is abstract and cannot be instantiated directly
+- [x] `_normalize()` computes global min/max across all groups; zero-variance attributes yield `0.0`
+- [x] `_combine()` is abstract; `NormalizedMeanScorer` does not implement it
+- [x] `score()` raises `ValueError` for empty groups, empty attributes, or any empty group
+- [x] `MeanMaxDifferenceScorer` overrides `_combine()` to return `max(differences)`
+- [x] `MeanMaxDifferenceScorer` is a `Scorer` instance
+- [x] Tests in `tests/test_scorer.py` cover: balanced groups, full-range unbalanced (score 1.0), multiple entities per group, multiple attributes, zero-variance attribute, three or more groups, floating-point values, and all error cases
 
 ## Blocked by
 
