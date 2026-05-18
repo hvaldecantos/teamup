@@ -1,11 +1,16 @@
 ---
 name: to-issues
 description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
+arguments:
+  - name: prd_description
+    description: A file with requirements description.
+    type: string
+    required: true
 ---
 
 # To Issues
 
-Break a plan into independently-grabbable issues using vertical slices (tracer bullets) and add them to /docs/issues directory.
+Break the description in the prd in {{prd_description}} plan into independently-grabbable issues using vertical slices (tracer bullets) and add them to /docs/issues directory.
 
 ## Process
 
@@ -79,3 +84,4 @@ Or "None - can start immediately" if no blockers.
 </issue-template>
 
 Do NOT close or modify any parent issue.
+Do Notimplement any code.
