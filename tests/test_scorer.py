@@ -3,7 +3,7 @@
 import pytest
 
 from teamup.entity import Entity
-from teamup.scorer import MaxDifferenceScorer, MeanMaxDifferenceScorer, NormalizedMeanScorer, Scorer
+from teamup.scorer import MaxDifferenceScorer, MeanMaxDifferenceScorer, NormalizedScorer, Scorer
 
 
 def test_scorer_is_abstract() -> None:
@@ -198,14 +198,14 @@ def test_max_difference_scorer_complex_case() -> None:
 
 
 # ---------------------------------------------------------------------------
-# NormalizedMeanScorer / MeanMaxDifferenceScorer tests
+# NormalizedScorer / MeanMaxDifferenceScorer tests
 # ---------------------------------------------------------------------------
 
 
-def test_normalized_mean_scorer_is_abstract() -> None:
-    """NormalizedMeanScorer cannot be instantiated directly."""
+def test_normalized_scorer_is_abstract() -> None:
+    """NormalizedScorer cannot be instantiated directly."""
     with pytest.raises(TypeError):
-        NormalizedMeanScorer()  # type: ignore
+        NormalizedScorer()  # type: ignore
 
 
 def test_mean_max_difference_scorer_instantiation() -> None:
@@ -233,9 +233,9 @@ def test_mean_max_difference_scorer_full_range_unbalanced() -> None:
 
 
 def test_mean_max_difference_scorer_multiple_entities_per_group() -> None:
-    """Score is based on group means, not raw sums."""
-    # Group1 mean = (0+100)/2 = 50, normalized mean = 0.5
-    # Group2 mean = (50+50)/2 = 50, normalized mean = 0.5
+    """Score is based on group sums of normalized values."""
+    # Group1 normalized sum = 0.0 + 1.0 = 1.0
+    # Group2 normalized sum = 0.5 + 0.5 = 1.0
     # Difference = 0.0
     group1 = [
         Entity(id="e1", attributes={"value": 0}),
@@ -252,8 +252,8 @@ def test_mean_max_difference_scorer_multiple_entities_per_group() -> None:
 
 def test_mean_max_difference_scorer_multiple_attributes() -> None:
     """_combine() returns max across per-attribute differences."""
-    # Attribute 'a': group1 = [0], group2 = [100] → normalized means 0.0 vs 1.0 → diff 1.0
-    # Attribute 'b': group1 = [50], group2 = [50] → normalized means 0.5 vs 0.5 → diff 0.0
+    # Attribute 'a': group1 normalized sum 0.0, group2 normalized sum 1.0 → diff 1.0
+    # Attribute 'b': group1 normalized sum 0.0, group2 normalized sum 0.0 → diff 0.0
     # _combine = max(1.0, 0.0) = 1.0
     group1 = [Entity(id="e1", attributes={"a": 0, "b": 50})]
     group2 = [Entity(id="e2", attributes={"a": 100, "b": 50})]
@@ -277,7 +277,7 @@ def test_mean_max_difference_scorer_zero_variance_attribute() -> None:
 def test_mean_max_difference_scorer_three_groups() -> None:
     """Score works correctly with three or more groups."""
     # Attribute 'v' values: group1=0, group2=50, group3=100
-    # Normalized means: 0.0, 0.5, 1.0 → diff = 1.0 - 0.0 = 1.0
+    # Normalized sums: 0.0, 0.5, 1.0 → diff = 1.0 - 0.0 = 1.0
     group1 = [Entity(id="e1", attributes={"v": 0})]
     group2 = [Entity(id="e2", attributes={"v": 50})]
     group3 = [Entity(id="e3", attributes={"v": 100})]

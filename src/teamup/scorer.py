@@ -92,13 +92,13 @@ class MaxDifferenceScorer(Scorer):
         return max_overall_difference
 
 
-class NormalizedMeanScorer(Scorer, ABC):
+class NormalizedScorer(Scorer, ABC):
     """
     Abstract base class for scorers that normalize attribute values before scoring.
 
     Implements a two-phase algorithm:
     1. Normalize all attribute values to [0, 1] using global min/max across all entities.
-    2. Compute per-attribute group means, then per-attribute max_mean - min_mean differences.
+    2. Compute per-attribute group sums, then per-attribute max_sum - min_sum differences.
     3. Delegate combining those differences to the abstract ``_combine()`` method.
 
     Zero-variance attributes (all entities share the same value) produce ``0.0``
@@ -149,7 +149,7 @@ class NormalizedMeanScorer(Scorer, ABC):
     @abstractmethod
     def _combine(self, differences: list[float]) -> float:
         """
-        Combine per-attribute max_group_mean − min_group_mean values into a score.
+        Combine per-attribute max_group_sum - min_group_sum values into a score.
 
         Args:
             differences: One value per attribute.
@@ -162,7 +162,7 @@ class NormalizedMeanScorer(Scorer, ABC):
         self, groups: list[list[Entity]], attributes: list[str]
     ) -> float:
         """
-        Compute a normalized-mean score for the partition.
+        Compute a normalized score for the partition.
 
         Args:
             groups: A list of groups, where each group is a list of Entity objects.
@@ -185,18 +185,18 @@ class NormalizedMeanScorer(Scorer, ABC):
 
         differences: list[float] = []
         for attr_name in attributes:
-            group_means = [
-                sum(entity[attr_name] for entity in normalized_group) / len(normalized_group)
+            group_sums = [
+                sum(entity[attr_name] for entity in normalized_group)
                 for normalized_group in normalized_groups
             ]
-            differences.append(max(group_means) - min(group_means))
+            differences.append(max(group_sums) - min(group_sums))
 
         return self._combine(differences)
 
 
-class MeanMaxDifferenceScorer(NormalizedMeanScorer):
+class MeanMaxDifferenceScorer(NormalizedScorer):
     """
-    Concrete scorer that returns the maximum per-attribute normalized mean difference.
+    Concrete scorer that returns the maximum per-attribute normalized sum difference.
 
     Overrides ``_combine()`` to return ``max(differences)``, making it the most
     conservative (pessimistic) normalized scorer.
@@ -204,3 +204,7 @@ class MeanMaxDifferenceScorer(NormalizedMeanScorer):
 
     def _combine(self, differences: list[float]) -> float:
         return max(differences)
+
+
+# Backward-compatible alias during migration.
+NormalizedMeanScorer = NormalizedScorer
