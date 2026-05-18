@@ -194,7 +194,7 @@ class NormalizedScorer(Scorer, ABC):
         return self._combine(differences)
 
 
-class MeanMaxDifferenceScorer(NormalizedScorer):
+class NormalizedMaxDifferenceScorer(NormalizedScorer):
     """
     Concrete scorer that returns the maximum per-attribute normalized sum difference.
 
@@ -204,4 +204,9 @@ class MeanMaxDifferenceScorer(NormalizedScorer):
 
     def _combine(self, differences: list[float]) -> float:
         return max(differences)
+
+
+# Backward-compatible aliases during migration.
+NormalizedMeanScorer = NormalizedScorer
+MeanMaxDifferenceScorer = NormalizedMaxDifferenceScorer
 
