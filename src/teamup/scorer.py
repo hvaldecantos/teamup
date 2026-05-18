@@ -205,6 +205,3 @@ class MeanMaxDifferenceScorer(NormalizedScorer):
     def _combine(self, differences: list[float]) -> float:
         return max(differences)
 
-
-# Backward-compatible alias during migration.
-NormalizedMeanScorer = NormalizedScorer
