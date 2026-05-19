@@ -204,3 +204,28 @@ class NormalizedMaxDifferenceScorer(NormalizedScorer):
 
     def _combine(self, differences: list[float]) -> float:
         return max(differences)
+
+
+class NormalizedAverageDifferenceScorer(NormalizedScorer):
+    """
+    Concrete scorer that returns the average of per-attribute normalized sum differences.
+
+    Overrides ``_combine()`` to return the arithmetic mean of differences,
+    treating all attributes equally.
+    """
+
+    def _combine(self, differences: list[float]) -> float:
+        return sum(differences) / len(differences)
+
+
+class NormalizedRMSDifferenceScorer(NormalizedScorer):
+    """
+    Concrete scorer that returns the RMS of per-attribute normalized sum differences.
+
+    Overrides ``_combine()`` to return the root mean square of differences,
+    penalizing larger imbalances more heavily than smaller ones.
+    """
+
+    def _combine(self, differences: list[float]) -> float:
+        return float((sum(d ** 2 for d in differences) / len(differences)) ** 0.5)
+

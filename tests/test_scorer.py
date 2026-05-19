@@ -3,7 +3,14 @@
 import pytest
 
 from teamup.entity import Entity
-from teamup.scorer import MaxDifferenceScorer, NormalizedMaxDifferenceScorer, NormalizedScorer, Scorer
+from teamup.scorer import (
+    MaxDifferenceScorer,
+    NormalizedAverageDifferenceScorer,
+    NormalizedMaxDifferenceScorer,
+    NormalizedRMSDifferenceScorer,
+    NormalizedScorer,
+    Scorer,
+)
 
 
 def test_scorer_is_abstract() -> None:
@@ -318,3 +325,144 @@ def test_normalized_max_difference_scorer_empty_group_error() -> None:
     scorer = NormalizedMaxDifferenceScorer()
     with pytest.raises(ValueError, match="all groups must be non-empty"):
         scorer.score([group1, group2], ["value"])
+
+
+# ---------------------------------------------------------------------------
+# NormalizedAverageDifferenceScorer tests
+# ---------------------------------------------------------------------------
+
+
+def test_normalized_average_difference_scorer_instantiation() -> None:
+    """NormalizedAverageDifferenceScorer is a Scorer instance."""
+    scorer = NormalizedAverageDifferenceScorer()
+    assert isinstance(scorer, Scorer)
+
+
+def test_normalized_average_difference_scorer_balanced_groups() -> None:
+    """Balanced groups produce a score of 0.0."""
+    group1 = [Entity(id="e1", attributes={"value": 5})]
+    group2 = [Entity(id="e2", attributes={"value": 5})]
+
+    scorer = NormalizedAverageDifferenceScorer()
+    assert scorer.score([group1, group2], ["value"]) == 0.0
+
+
+def test_normalized_average_difference_scorer_single_attribute() -> None:
+    """Single attribute with full-range unbalance."""
+    # Both groups get normalized to [0, 1], difference = 1.0
+    # Single attribute, so average = 1.0
+    group1 = [Entity(id="e1", attributes={"value": 0})]
+    group2 = [Entity(id="e2", attributes={"value": 100})]
+
+    scorer = NormalizedAverageDifferenceScorer()
+    assert scorer.score([group1, group2], ["value"]) == 1.0
+
+
+def test_normalized_average_difference_scorer_multiple_attributes() -> None:
+    """Multiple attributes averaged together."""
+    # Attribute 'a': group1 normalized sum 0.0, group2 normalized sum 1.0 → diff 1.0
+    # Attribute 'b': group1 normalized sum 0.0, group2 normalized sum 0.0 → diff 0.0
+    # Average = (1.0 + 0.0) / 2 = 0.5
+    group1 = [Entity(id="e1", attributes={"a": 0, "b": 50})]
+    group2 = [Entity(id="e2", attributes={"a": 100, "b": 50})]
+
+    scorer = NormalizedAverageDifferenceScorer()
+    assert scorer.score([group1, group2], ["a", "b"]) == pytest.approx(0.5)
+
+
+def test_normalized_average_difference_scorer_three_attributes() -> None:
+    """Average of three per-attribute differences."""
+    # Attribute 'a': diff = 1.0 (group1=0, group2=100)
+    # Attribute 'b': diff = 1.0 (group1=0, group2=100)
+    # Attribute 'c': diff = 0.0 (group1=25, group2=25, zero variance)
+    # Average = (1.0 + 1.0 + 0.0) / 3 ≈ 0.667
+    group1 = [Entity(id="e1", attributes={"a": 0, "b": 0, "c": 25})]
+    group2 = [Entity(id="e2", attributes={"a": 100, "b": 100, "c": 25})]
+
+    scorer = NormalizedAverageDifferenceScorer()
+    assert scorer.score([group1, group2], ["a", "b", "c"]) == pytest.approx(2.0 / 3)
+
+
+def test_normalized_average_difference_scorer_zero_variance_attribute() -> None:
+    """Zero-variance attribute contributes zero to average."""
+    group1 = [Entity(id="e1", attributes={"const": 7, "v": 0})]
+    group2 = [Entity(id="e2", attributes={"const": 7, "v": 100})]
+
+    scorer = NormalizedAverageDifferenceScorer()
+    # const diff = 0.0, v diff = 1.0, average = 0.5
+    assert scorer.score([group1, group2], ["const", "v"]) == pytest.approx(0.5)
+
+
+# ---------------------------------------------------------------------------
+# NormalizedRMSDifferenceScorer tests
+# ---------------------------------------------------------------------------
+
+
+def test_normalized_rms_difference_scorer_instantiation() -> None:
+    """NormalizedRMSDifferenceScorer is a Scorer instance."""
+    scorer = NormalizedRMSDifferenceScorer()
+    assert isinstance(scorer, Scorer)
+
+
+def test_normalized_rms_difference_scorer_balanced_groups() -> None:
+    """Balanced groups produce a score of 0.0."""
+    group1 = [Entity(id="e1", attributes={"value": 5})]
+    group2 = [Entity(id="e2", attributes={"value": 5})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    assert scorer.score([group1, group2], ["value"]) == 0.0
+
+
+def test_normalized_rms_difference_scorer_single_attribute() -> None:
+    """Single attribute with full-range unbalance."""
+    # Single difference of 1.0, RMS = sqrt(1.0^2 / 1) = 1.0
+    group1 = [Entity(id="e1", attributes={"value": 0})]
+    group2 = [Entity(id="e2", attributes={"value": 100})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    assert scorer.score([group1, group2], ["value"]) == pytest.approx(1.0)
+
+
+def test_normalized_rms_difference_scorer_two_attributes_equal() -> None:
+    """Two equal differences: RMS = sqrt((1.0^2 + 1.0^2) / 2) = sqrt(1.0) = 1.0."""
+    group1 = [Entity(id="e1", attributes={"a": 0, "b": 0})]
+    group2 = [Entity(id="e2", attributes={"a": 100, "b": 100})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    assert scorer.score([group1, group2], ["a", "b"]) == pytest.approx(1.0)
+
+
+def test_normalized_rms_difference_scorer_mixed_differences() -> None:
+    """RMS penalizes larger differences more.
+    Differences [1.0, 0.0]: RMS = sqrt((1.0^2 + 0.0^2) / 2) ≈ 0.707
+    vs average = 0.5
+    """
+    group1 = [Entity(id="e1", attributes={"a": 0, "b": 50})]
+    group2 = [Entity(id="e2", attributes={"a": 100, "b": 50})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    # a diff = 1.0, b diff = 0.0, RMS = sqrt(1.0 / 2) ≈ 0.707
+    assert scorer.score([group1, group2], ["a", "b"]) == pytest.approx((1.0 ** 2 / 2) ** 0.5)
+
+
+def test_normalized_rms_difference_scorer_three_attributes() -> None:
+    """RMS of three differences."""
+    # diffs = [1.0, 1.0, 0.0]
+    # RMS = sqrt((1.0^2 + 1.0^2 + 0.0^2) / 3) = sqrt(2.0 / 3) ≈ 0.816
+    group1 = [Entity(id="e1", attributes={"a": 0, "b": 0, "c": 25})]
+    group2 = [Entity(id="e2", attributes={"a": 100, "b": 100, "c": 25})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    expected = ((1.0 ** 2 + 1.0 ** 2 + 0.0 ** 2) / 3) ** 0.5
+    assert scorer.score([group1, group2], ["a", "b", "c"]) == pytest.approx(expected)
+
+
+def test_normalized_rms_difference_scorer_zero_variance_attribute() -> None:
+    """Zero-variance attribute contributes zero to RMS."""
+    group1 = [Entity(id="e1", attributes={"const": 7, "v": 0})]
+    group2 = [Entity(id="e2", attributes={"const": 7, "v": 100})]
+
+    scorer = NormalizedRMSDifferenceScorer()
+    # diffs = [0.0, 1.0], RMS = sqrt((0 + 1) / 2) ≈ 0.707
+    assert scorer.score([group1, group2], ["const", "v"]) == pytest.approx((1.0 / 2) ** 0.5)
+

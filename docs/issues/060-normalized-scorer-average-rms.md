@@ -1,7 +1,7 @@
 # Issue 060: `NormalizedAverageDifferenceScorer` and `NormalizedRMSDifferenceScorer`
 
 **Type**: AFK
-**Status**: open
+**Status**: done
 
 ## What to build
 
@@ -18,11 +18,11 @@ No changes to `NormalizedScorer`, `NormalizedMaxDifferenceScorer`, `Partitioner`
 
 ## Acceptance criteria
 
-- [ ] `NormalizedAverageDifferenceScorer` overrides `_combine()` to return `sum(differences) / len(differences)`
-- [ ] `NormalizedRMSDifferenceScorer` overrides `_combine()` to return `(sum(d ** 2 for d in differences) / len(differences)) ** 0.5`
-- [ ] Both subclasses are `Scorer` instances
-- [ ] Tests in `tests/test_scorer.py` verify correct scores for known distributions using average and RMS formulas
-- [ ] No logic duplicated from `NormalizedScorer` base class
+- [x] `NormalizedAverageDifferenceScorer` overrides `_combine()` to return `sum(differences) / len(differences)`
+- [x] `NormalizedRMSDifferenceScorer` overrides `_combine()` to return `(sum(d ** 2 for d in differences) / len(differences)) ** 0.5`
+- [x] Both subclasses are `Scorer` instances
+- [x] Tests in `tests/test_scorer.py` verify correct scores for known distributions using average and RMS formulas
+- [x] No logic duplicated from `NormalizedScorer` base class
 
 ## Blocked by
 
